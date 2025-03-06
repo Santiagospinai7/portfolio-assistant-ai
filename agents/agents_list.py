@@ -1,13 +1,19 @@
+import os
+
 from crewai import Agent
 from dotenv import load_dotenv
-
-from agents.llm import TogetherLLM  # Import the custom LLM
+from langchain.llms import HuggingFaceEndpoint
 
 # Load environment variables
 load_dotenv()
 
 # Initialize the Together LLM
-llm = TogetherLLM()
+# llm = TogetherLLM()
+llm = HuggingFaceEndpoint(
+    repo_id="mistralai/Mistral-7B-Instruct-v0.3",
+    huggingfacehub_api_token=os.getenv("HUGGINGFACE_API_KEY"),
+    temperature=0.7
+)
 
 # Interface Agent
 interface_agent = Agent(
