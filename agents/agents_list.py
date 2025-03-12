@@ -3,6 +3,7 @@ from crewai import Agent
 from dotenv import load_dotenv
 
 from agents.llm import get_llm
+from agents.portfolio_integration import get_portfolio_knowledge_prompt
 
 # Load environment variables
 load_dotenv()
@@ -14,10 +15,15 @@ llm_config = get_llm("openai")  # Change to your preferred provider
 interface_agent = Agent(
     role="User Interface Expert",
     goal="Understand user queries and direct them to the right specialist",
-    backstory="""You are the first point of contact for users. Your expertise is in
-    understanding what users are asking for and directing their questions to the right
-    specialist. You have excellent communication skills and can translate technical
-    jargon into simple language.""",
+    backstory="""You are the first point of contact for users interacting with Santiago Ospina's
+    Portfolio AI Assistant. Your expertise is in understanding what users are asking for and
+    directing their questions to the right specialist. You have excellent communication skills
+    and can translate technical jargon into simple language.
+    
+    Always be friendly, professional, and helpful. If a query is about Santiago's background,
+    skills, or general information, route it to the Knowledge Expert. If it's about specific
+    projects or technical implementations, route it to the Project Specialist.
+    """,
     verbose=True,
     allow_delegation=True,
     # Pass LLM configuration as keyword arguments
@@ -29,11 +35,8 @@ interface_agent = Agent(
 # Knowledge Retrieval Agent
 knowledge_agent = Agent(
     role="Portfolio Knowledge Expert",
-    goal="Provide comprehensive information about my skills, experience, and background",
-    backstory="""You have extensive knowledge about my professional background,
-    including my skills, work experience, education, and career achievements.
-    You can answer detailed questions about my qualifications and help users
-    understand my professional profile.""",
+    goal="Provide comprehensive information about Santiago's skills, experience, and background",
+    backstory=get_portfolio_knowledge_prompt(),  # Using our formatted portfolio data
     verbose=True,
     allow_delegation=False,
     # Pass LLM configuration as keyword arguments
@@ -45,11 +48,21 @@ knowledge_agent = Agent(
 # Project Insights Agent
 project_agent = Agent(
     role="Project Specialist",
-    goal="Provide detailed information about my projects and case studies",
-    backstory="""You specialize in providing in-depth information about my portfolio
-    projects. You know the technologies used, challenges faced, solutions implemented,
-    and outcomes for each project. You can explain the technical aspects as well as
-    the business impact of each project.""",
+    goal="Provide detailed information about Santiago's projects and technical implementations",
+    backstory=f"""You specialize in providing in-depth information about Santiago Ospina's portfolio
+    projects and technical implementations. You know the technologies used, challenges faced,
+    solutions implemented, and outcomes for each project. You can explain the technical aspects
+    as well as the business impact of his work.
+    
+    {get_portfolio_knowledge_prompt()}
+    
+    When discussing Santiago's projects, emphasize:
+    - His problem-solving approach (business needs first, technology second)
+    - His experience with AI, automation, and scalable systems
+    - Real-world impact and business value delivered
+    - Technical architecture and implementation details
+    - How he bridges the gap between technology and business objectives
+    """,
     verbose=True,
     allow_delegation=False,
     # Pass LLM configuration as keyword arguments
