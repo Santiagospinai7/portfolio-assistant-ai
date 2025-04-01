@@ -16,6 +16,7 @@ class ConversationMemory:
         # Create storage directory if it doesn't exist
         os.makedirs(storage_path, exist_ok=True)
     
+    
     def add_message(self, conversation_id: str, role: str, content: str) -> bool:
         """
         Add a message to a conversation
@@ -31,6 +32,15 @@ class ConversationMemory:
         # Validate inputs
         if role not in ["user", "assistant"]:
             raise ValueError("Role must be either 'user' or 'assistant'")
+        
+        # Ensure content is a string
+        if not isinstance(content, str):
+            if hasattr(content, 'raw'):
+                content = content.raw
+            elif hasattr(content, '__str__'):
+                content = str(content)
+            else:
+                content = f"Unable to convert content of type {type(content)} to string"
         
         # Create timestamp
         timestamp = datetime.now().isoformat()

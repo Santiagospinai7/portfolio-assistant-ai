@@ -1,0 +1,20 @@
+[
+  {
+    "query": "What are Santiago's technical skills?",
+    "user_id": "anonymous",
+    "conversation_id": "a364620e-2649-465d-9626-2573d4c387f6",
+    "timestamp": "2025-03-31T22:59:22.321945",
+    "date": "2025-03-31",
+    "time": "22:59:22",
+    "response_time": 61.78279709815979
+  },
+  {
+    "query": "Tell me about Santiago's studies",
+    "user_id": "anonymous",
+    "conversation_id": "437677a4-659d-43b4-9624-57b6d86ab422",
+    "timestamp": "2025-03-31T23:01:38.503020",
+    "date": "2025-03-31",
+    "time": "23:01:38",
+    "response_time": 35.42304515838623
+  }
+]

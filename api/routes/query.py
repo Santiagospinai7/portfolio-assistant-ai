@@ -43,9 +43,17 @@ async def process_query(
         
         # Process the query
         response = crew.kickoff()
-        
+
+        # Convert CrewOutput to string if necessary
+        if hasattr(response, 'raw'):
+            response_text = response.raw  # Get the raw string from CrewOutput
+        elif hasattr(response, '__str__'):
+            response_text = str(response)  # Fallback to string representation
+        else:
+            response_text = "Unable to process response format"
+
         # Record response in history
-        memory_store.add_message(conversation_id, "assistant", response)
+        memory_store.add_message(conversation_id, "assistant", response_text)
         
         # Track query in analytics (background)
         background_tasks.add_task(
@@ -59,12 +67,12 @@ async def process_query(
         # Return the response
         return QueryResponse(
             conversation_id=conversation_id,
-            response=response,
+            response=response_text,  # Use the extracted text
             agent_used=agent_used,
-            confidence=0.95,  # You can implement proper confidence scoring later
+            confidence=0.95,
             processing_time=time.time() - start_time,
             metadata={
-                "conversation_length": len(conversation_history) + 2  # +2 for current exchange
+                "conversation_length": len(conversation_history) + 2
             }
         )
     
