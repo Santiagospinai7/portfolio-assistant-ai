@@ -16,8 +16,19 @@ load_dotenv()
 # Get LLM configuration for the crew manager
 manager_llm_config = get_llm("openai")  # Use OpenAI for manager (more reliable)
 
-def get_portfolio_crew(question):
+def get_portfolio_crew(question, conversation_history=None):
     """Create and configure a crew to handle portfolio inquiries"""
+    
+    # Add conversation context if available
+    if conversation_history:
+        # Format the conversation history into a summary
+        history_summary = "\n\nPrevious conversation:\n"
+        for msg in conversation_history[-3:]:  # Last 3 messages
+            role = "User" if msg["role"] == "user" else "Assistant"
+            history_summary += f"{role}: {msg['content']}\n\n"
+        
+        # Append to the question
+        question = f"{history_summary}\nCurrent question: {question}"
     
     # Create a routing task
     routing_task = create_routing_task(question, interface_agent)
@@ -35,8 +46,19 @@ def get_portfolio_crew(question):
     
     return portfolio_crew
 
-def get_project_crew(project_name, question):
+def get_project_crew(project_name, question, conversation_history=None):
     """Create and configure a crew to handle project-specific inquiries"""
+    
+    # Add conversation context if available
+    if conversation_history:
+        # Format the conversation history into a summary
+        history_summary = "\n\nPrevious conversation:\n"
+        for msg in conversation_history[-3:]:  # Last 3 messages
+            role = "User" if msg["role"] == "user" else "Assistant"
+            history_summary += f"{role}: {msg['content']}\n\n"
+        
+        # Append to the question
+        question = f"{history_summary}\nCurrent question about {project_name}: {question}"
     
     # Create a project task
     project_task = create_project_inquiry_task(project_name, question, project_agent)
