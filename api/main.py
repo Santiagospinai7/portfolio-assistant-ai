@@ -21,10 +21,29 @@ logging.basicConfig(
 logger = logging.getLogger("portfolio-api")
 
 # Initialize FastAPI app
+# Add to api/main.py
 app = FastAPI(
     title="Santiago Ospina Portfolio AI API",
-    description="API for interacting with Santiago's portfolio AI assistant",
-    version="1.0.0"
+    description="""
+    # Portfolio AI Assistant API
+    
+    This API provides access to Santiago Ospina's AI portfolio assistant, which can answer
+    questions about his skills, experience, and projects.
+    
+    ## Features
+    
+    * Query the AI assistant about Santiago's background
+    * Get information about specific projects
+    * Maintain conversation context
+    * Track conversation history
+    
+    ## Authentication
+    
+    Some endpoints may require an API key passed via the `X-API-Key` header.
+    """,
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
 # Add CORS middleware
